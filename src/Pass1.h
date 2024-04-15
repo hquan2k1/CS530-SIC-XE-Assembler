@@ -5,20 +5,19 @@
 #include <string>
 #include <unordered_map>
 
+using namespace std;
+
 class Pass1 {
 public:
-    Pass1();
-    void process(std::string inputFile);
-
+    string fileName;
+    bool error_flag=false;
+    int program_length;
+    string firstExecutable_Sec;
+    void pass1();
 private:
-    int LOCCTR;
-    std::unordered_map<std::string, int> SYMTAB;
-    void processLine(const std::string& line);
-    void writeIntermediateFile(const std::string& line);
-    bool isComment(const std::string& line);
-    void handleStartDirective(const std::string& operand);
-    void handleEndDirective();
-    void handleError(const std::string& message);
+    void handle_LTORG(string& litPrefix, int& lineNumberDelta,int lineNumber,int& LOCCTR, int& lastDeltaLOCCTR);
+    void evaluateExpression(string expression, bool& relative,string& tempOperand,int lineNumber, ofstream& errorFile,bool& error_flag);
+
 };
 
 #endif // PASS1_H

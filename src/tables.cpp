@@ -5,40 +5,6 @@
 
 using namespace std;
 
-struct struct_extdef{
-    string name ;
-    string address ;
-    char exists ;
-    struct_extdef(){
-        name="undefined" ;
-        address="0" ;
-        exists='n' ;
-    }
-};
-struct struct_extref{
-    string name ;
-    string address ;
-    char exists ;
-    struct_extref(){
-        name="undefined" ;
-        address="0" ;
-        exists='n' ;
-    }
-};
-struct struct_csect{
-    string name ;
-    string LOCCTR ;
-    int section_number ;
-    int length ;
-    map<string,struct_extdef> EXTDEF_TAB ;
-    map<string,struct_extref> EXTREF_TAB ;
-    struct_csect(){
-        name="DEFAULT" ;
-        LOCCTR="0" ;
-        section_number=0 ;
-        length=0 ;
-    }
-};
 struct struct_opcode{
     string opcode;
     int format;
@@ -75,20 +41,6 @@ struct struct_label{
        relative = 0;
      }
 };
-struct struct_blocks{
-     string startAddress;
-     string name;
-     string LOCCTR;
-     int number;
-     char exists;
-     struct_blocks(){
-       name="undefined";
-       startAddress="?";
-       exists='n';
-       number = -1;
-       LOCCTR = "0";
-     }
-};
 
 
 struct struct_register{
@@ -104,15 +56,11 @@ typedef map<string,struct_label> SYMBOL_TABLE_TYPE;
 typedef map<string,struct_opcode> OPCODE_TABLE_TYPE;
 typedef map<string,struct_register> REG_TABLE_TYPE;
 typedef map<string,struct_literal> LIT_TABLE_TYPE;
-typedef map<string,struct_blocks> BLOCK_TABLE_TYPE;
-typedef map<string,struct_csect> CSECT_TABLE_TYPE;
 
 SYMBOL_TABLE_TYPE SYMTAB;
 OPCODE_TABLE_TYPE OPTAB;
 REG_TABLE_TYPE REGTAB;
 LIT_TABLE_TYPE LITTAB;
-BLOCK_TABLE_TYPE BLOCKS;
-CSECT_TABLE_TYPE CSECT_TAB;
 
 void load_REGTAB(){
   REGTAB["A"].num='0';
@@ -380,15 +328,7 @@ void load_OPTAB(){
   OPTAB["WD"].exists='y';
 }
 
-void load_BLOCKS(){
-  BLOCKS["DEFAULT"].exists = 'y';
-  BLOCKS["DEFAULT"].name = "DEFAULT";
-  BLOCKS["DEFAULT"].startAddress = "00000";
-  BLOCKS["DEFAULT"].number=0;
-  BLOCKS["DEFAULT"].LOCCTR = "0";
-}
 void load_tables(){
-  load_BLOCKS();
   load_OPTAB();
   load_REGTAB();
 }
