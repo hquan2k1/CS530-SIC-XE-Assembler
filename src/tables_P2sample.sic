@@ -1,15 +1,27 @@
-**********************************SYMBOL TABLE*****************************
+CSect   Symbol  Value   LENGTH  Flags:
+--------------------------------------
 
-:-	name:undefined	|address:0	|relative:00000 
-*:-	name:*	|address:02F07	|relative:00001 
-0:-	name:	|address:0	|relative:00000 
-COUNT:-	name:COUNT	|address:00021	|relative:00001 
-FIRST:-	name:FIRST	|address:00000	|relative:00001 
-LOOP:-	name:LOOP	|address:0000A	|relative:00001 
-MYLIT:-	name:MYLIT	|address:0001D	|relative:00001 
-TABLE:-	name:TABLE	|address:00024	|relative:00001 
-TABLE2:-	name:TABLE2	|address:01794	|relative:00001 
-TOTAL:-	name:TOTAL	|address:02F04	|relative:00001 
+undefined	0	00004	 
+*	02F07	      	R
+	0	      	 
+COUNT	00021	      	R
+FIRST	00000	      	R
+LOOP	0000A	      	R
+MYLIT	0001D	      	R
+TABLE	00024	      	R
+TABLE2	01794	      	R
+TOTAL	02F04	      	R
+
+undefined	0	00004	 
+*	02F07	      	R
+	0	      	 
+COUNT	00021	      	R
+FIRST	00000	      	R
+LOOP	0000A	      	R
+MYLIT	0001D	      	R
+TABLE	00024	      	R
+TABLE2	01794	      	R
+TOTAL	02F04	      	R
 
 **********************************LITERAL TABLE*****************************
 

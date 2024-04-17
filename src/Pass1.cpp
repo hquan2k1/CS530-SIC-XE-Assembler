@@ -23,7 +23,7 @@ void Pass1::handle_LTORG(string& litPrefix, int& lineNumberDelta,int lineNumber,
       lineNumber += 5;
       lineNumberDelta += 5;
       LITTAB[it.first].address = intToStringHex(LOCCTR);
-      litPrefix += "\n" + intToStringHex(LOCCTR) + "\t" + "*" + "\t" + "="+ litValue + "\t" + " " + "\t" + " ";
+      litPrefix += intToStringHex(LOCCTR) + "\t" + "*" + "\t" + "="+ litValue + "\t" + " " + "\t" + " ";
 
       if(litValue[0]=='X'){
         LOCCTR += (litValue.length() -3)/2;
@@ -450,13 +450,26 @@ int main(int argc, char* argv[]){
   cout<<"Writing intermediate file to 'intermediate_"<<pass1.fileName<<"'"<<endl;
   cout<<"Writing error file to 'error_"<<pass1.fileName<<"'"<<endl;
   pass1.pass1();
-  cout<<"Writing SYMBOL TABLE"<<endl;
-  printtab.open("tables_"+ pass1.fileName) ;
-  writeToFile(printtab,"**********************************SYMBOL TABLE*****************************\n") ;
-    for (auto const& it: SYMTAB) { 
-        writestring+=it.first+":-\t"+ "name:"+it.second.name+"\t|"+ "address:"+it.second.address+"\t|"+ "relative:"+intToStringHex(it.second.relative)+" \n" ;
-    } 
-    writeToFile(printtab,writestring) ;
+cout << "Writing SYMBOL TABLE" << endl;
+printtab.open("tables_" + pass1.fileName);
+writeToFile(printtab, "CSect   Symbol  Value   LENGTH  Flags:\n--------------------------------------\n");
+
+bool isFirstLine = true; // Flag to check if it's the first line
+
+for (auto const& it: SYMTAB) { 
+    string lengthStr = isFirstLine ? intToStringHex(pass1.program_length) : "      "; // Only set length for the first line
+    string flagsStr = it.second.relative ? "R" : " "; // Set flags to 'R' if relative is present
+
+    writestring += it.second.name + "\t" + it.second.address + "\t" + lengthStr + "\t" + flagsStr + "\n";
+
+    isFirstLine = false; // After the first iteration, set isFirstLine to false
+} 
+
+writeToFile(printtab, writestring);
+
+
+writeToFile(printtab, writestring);
+
 
   writestring="" ;
     cout<<"Writing LITERAL TABLE"<<endl;
