@@ -1,6 +1,6 @@
 #######################
-# QUAN NGUYEN         #
-# cssc4550            #
+# QUAN NGUYEN Ian Gowe#
+# cssc4550 cssc4053   #
 # CS530, Spring 2024  # 
 # Assignment 2        #
 # makefile            #
