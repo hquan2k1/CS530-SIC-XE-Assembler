@@ -1,23 +1,4 @@
-/*This file contains function helpfull for functioningof other files
-Function declared here rarelly changes
-This file also contains important files to #include*/
-#include<iostream>
-#include<fstream>
-#include<string>
-#include<sstream>
-#include<iomanip>
-#include<map>
-#include<algorithm>
-#include <string>
-#include <vector>
-#include <tables.cpp>
-using namespace std;
-
-string getString(char c){
-  string s(1,c) ;
-  return s ;
-}
-
+#include "utility.h"
 /**
  * Converts an integer to a hexadecimal string representation.
  * 
@@ -25,7 +6,7 @@ string getString(char c){
  * @param fill The number of characters to fill in the resulting string. Default is 5.
  * @return The hexadecimal string representation of the integer.
  */
-string intToStringHex(int x,int fill = 5){
+string intToStringHex(int x,int fill){
   stringstream s;
   s << setfill('0') << setw(fill) << hex << x;
   string temp = s.str();
@@ -82,6 +63,12 @@ int stringHexToInt(string x){
   return stoul(x,nullptr,16);
 }
 
+/**
+ * Converts a string to its hexadecimal representation.
+ *
+ * @param input The input string to convert.
+ * @return The hexadecimal representation of the input string.
+ */
 string stringToHexString(const string& input){
     static const char* const lut = "0123456789ABCDEF";
     size_t len = input.length();
@@ -97,6 +84,12 @@ string stringToHexString(const string& input){
     return output;
 }
 
+/**
+ * Checks if a character is a white space character.
+ * 
+ * @param x The character to be checked.
+ * @return true if the character is a white space character, false otherwise.
+ */
 bool checkWhiteSpace(char x){
   if(x==' ' || x=='\t'){
     return true;
@@ -143,7 +136,7 @@ bool if_all_num(string x){
  * @param readTillEnd Optional parameter to specify whether to read till the end of the line.
  *                   Default value is false.
  */
-void readFirstNonWhiteSpace(string line,int& index,bool& status,string& data,bool readTillEnd=false){
+void readFirstNonWhiteSpace(string line,int& index,bool& status,string& data,bool readTillEnd){
   data = "";
   status = true;
 
@@ -172,6 +165,14 @@ void readFirstNonWhiteSpace(string line,int& index,bool& status,string& data,boo
   }
 }
 
+/**
+ * Reads a byte operand from the given line of code.
+ * 
+ * @param line The line of code to read from.
+ * @param index The current index in the line of code.
+ * @param status The status indicating if the operation was successful.
+ * @param data The byte operand read from the line of code.
+ */
 void readByteOperand(string line,int& index,bool& status,string& data){
   data = "";
   status = true;
@@ -209,7 +210,7 @@ void readByteOperand(string line,int& index,bool& status,string& data){
  * @param data The data to be written to the file.
  * @param newline Flag indicating whether to append a newline character after the data. Default is true.
  */
-void writeToFile(ofstream& file,string data,bool newline=true){
+void writeToFile(ofstream& file,string data,bool newline){
   if(newline){
     file<<data<<endl;
   }else{
@@ -242,20 +243,6 @@ char getFlagFormat(string data){
   }
   return ' ';
 }
-
-class EvaluateString{
-public:
-  int getResult();
-  EvaluateString(string data);
-private:
-  string storedData;
-  int index;
-  char peek();
-  char get();
-  int term();
-  int factor();
-  int number();
-};
 
 EvaluateString::EvaluateString(string data){
   storedData = data;
@@ -320,26 +307,6 @@ char EvaluateString::peek(){
   return storedData[index];
 }
 
-/**
- * Comparator function for sorting entries in the symbol table.
- * The function compares two pairs of strings and struct_label objects.
- * It first checks if the 'isstart' flag of the first struct_label is set to 'y'.
- * If it is, the first pair is considered smaller and is placed before the second pair.
- * If the 'isstart' flag of the second struct_label is set to 'y', the second pair is considered smaller.
- * If neither 'isstart' flag is set to 'y', the function compares the addresses of the struct_labels.
- * The addresses are converted from hexadecimal strings to integers and compared.
- * If the address of the first struct_label is smaller, the first pair is considered smaller.
- * If the address of the second struct_label is smaller, the second pair is considered smaller.
- * If the addresses are equal, the pairs are considered equal.
- * 
- * @param a The first pair of string and struct_label to compare.
- * @param b The second pair of string and struct_label to compare.
- * @return True if the first pair is smaller, false otherwise.
- */
-bool symtabComparator(const pair<string, struct_label>& a, const pair<string, struct_label>& b) {
-  if (a.second.isstart == 'y') return true;
-  if (b.second.isstart == 'y') return false;
-  return stringHexToInt(a.second.address) < stringHexToInt(b.second.address);
-}
+
 
 

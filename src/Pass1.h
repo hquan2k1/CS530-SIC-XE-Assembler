@@ -4,6 +4,9 @@
 
 #include <string>
 #include <unordered_map>
+#include "utility.h" 
+#include "tables.h"
+
 
 using namespace std;
 
@@ -23,7 +26,7 @@ public:
 private:
     void handle_LTORG(string & litPrefix, int & LOCCTR, int & previousLOCCTR);
     void evaluateExpression(string expression, bool& relative,string& tempOperand, ofstream& errorFile,bool& error_flag);
-    
+
 };
 
 #endif // PASS1_H

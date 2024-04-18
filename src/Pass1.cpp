@@ -1,5 +1,3 @@
-#include "utility.cpp" 
-#include "tables.cpp"
 #include "Pass1.h"
 
 using namespace std;
@@ -200,6 +198,7 @@ void Pass1::pass1() {
   // Initialize the source file, intermediate file, and error file
   ifstream sourceFile;
   ofstream intermediateFile, errorFile;
+  string fileName_noEXT = fileName.substr(0, fileName.length() - 4);
 
   // Open the source file and validate input
   sourceFile.open(fileName);
@@ -209,7 +208,7 @@ void Pass1::pass1() {
   }
 
   // Open intermediate file and validate input
-  intermediateFile.open("intermediate_" + fileName);
+  intermediateFile.open(fileName_noEXT + ".i");
   if (!intermediateFile) {
     cout << "Unable to open file: intermediate_" << fileName << endl;
     exit(1);
@@ -218,13 +217,13 @@ void Pass1::pass1() {
   writeToFile(intermediateFile, "Address\tLabel\tOPCODE\tOPERAND\tComment");
 
   // Open error file and validate input
-  errorFile.open("error_" + fileName);
+  errorFile.open(fileName_noEXT + ".e");
   if (!errorFile) {
     cout << "Unable to open file: error_" << fileName << endl;
     exit(1);
   }
 
-  writeToFile(errorFile, "----------PASS1----------");
+  writeToFile(errorFile, "--------------- PASS1 ---------------");
 
   string fileLine;
   string writeData, writeDataSuffix = "", writeDataPrefix = "";
@@ -251,15 +250,18 @@ void Pass1::pass1() {
   readFirstNonWhiteSpace(fileLine, index, statusCode, opcode);
 
   if (opcode == "START") {
-    SYMTAB[label].name = label;
-    SYMTAB[label].address = intToStringHex(0);
-    SYMTAB[label].exists = 'y';
-    SYMTAB[label].isstart = 'y';
     readFirstNonWhiteSpace(fileLine, index, statusCode, operand);
+
     readFirstNonWhiteSpace(fileLine, index, statusCode, comment, true);
 
     startAddress = stringHexToInt(operand);
     LOCCTR = startAddress;
+    
+    SYMTAB[label].name = label;
+    SYMTAB[label].address = intToStringHex(LOCCTR);
+    SYMTAB[label].exists = 'y';
+    SYMTAB[label].isstart = 'y';
+
     writeData = intToStringHex(LOCCTR - prevLOCCTR) + "\t" + label + "\t" + opcode + "\t" + operand + "\t" + comment;
     writeToFile(intermediateFile, writeData); // Write file to intermediate file
 
@@ -269,6 +271,12 @@ void Pass1::pass1() {
     readFirstNonWhiteSpace(fileLine, index, statusCode, label); // Parse label
     readFirstNonWhiteSpace(fileLine, index, statusCode, opcode); // Parse OPCODE
   } else {
+
+    SYMTAB[label].name = label;
+    SYMTAB[label].address = intToStringHex(0);
+    SYMTAB[label].exists = 'y';
+    SYMTAB[label].isstart = 'y';
+
     startAddress = 0;
     LOCCTR = 0;
   }
@@ -285,6 +293,7 @@ void Pass1::pass1() {
             SYMTAB[label].address = intToStringHex(LOCCTR);
             SYMTAB[label].relative = 1;
             SYMTAB[label].exists = 'y';
+            SYMTAB[label].isstart = 'n';
           } else {
             writeData = "Duplicate symbol for '" + label + "'. Previously defined at " + SYMTAB[label].address;
             writeToFile(errorFile, writeData);
@@ -452,6 +461,7 @@ void Pass1::pass1() {
         SYMTAB[label].address = intToStringHex(LOCCTR);
         SYMTAB[label].relative = 1;
         SYMTAB[label].exists = 'y';
+        SYMTAB[label].isstart = 'n';
       }
       
       LOCCTR=prevLOCCTR=0;
@@ -495,4 +505,8 @@ void Pass1::pass1() {
       }
   }
 }
+
+
+
+
 
