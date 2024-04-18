@@ -7,6 +7,7 @@
 */
 
 #include "Pass1.h"
+#include "Pass2.h"
 
 /**
  * @brief Comparator function for sorting symbols in the symbol table.
@@ -56,7 +57,7 @@ int main(int argc, char* argv[]) {
     load_tables();
 
     cout << "\nPerforming PASS1" << endl;
-    cout << "Writing intermediate file to " << fileName_noEXT << ".i" << endl;
+    cout << "\nWriting intermediate file to " << fileName_noEXT << ".i" << endl;
     cout << "Writing error file to " << fileName_noEXT << ".e" << endl;
     pass1.pass1();
 
@@ -91,11 +92,19 @@ int main(int argc, char* argv[]) {
 
     pass1.printtab.close();
 
-    cout << "PASS1 complete" << endl;
+    cout << "\nPASS1 complete" << endl;
 
-    cout << "Performing PASS2" << endl;
+    cout << "\nPerforming PASS2" << endl;
 
-    
+    Pass2 pass2;
+    pass2.fileName = argv[i];
+
+    clear_tables();
+    load_tables();
+
+    cout<<"\nPerforming PASS2"<<endl;
+    cout << "Writing listing file to listing_"<<pass2.fileName<< endl;
+    pass2.pass2();
   }
 
   return 0;

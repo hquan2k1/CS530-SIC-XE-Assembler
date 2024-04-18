@@ -16,6 +16,8 @@ using namespace std;
 class Pass2 {
 public:
     string fileName;
+    ofstream printtab;
+    string writestring;
     void pass2();
 
 private:
