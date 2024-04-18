@@ -11,6 +11,7 @@
 
 using namespace std;
 
+Pass1 pass1;
 
 int baseRegisterVal;
 
@@ -259,24 +260,24 @@ void Pass2::pass2()
 {
     //OPEN FILES
     string tempBuffer;
-    intermediateFile.open("intermediate_"+ fileName);//begin
-    if(!intermediateFile)
+    pass1.intermediateFile.open("intermediate_"+ fileName);//begin
+    if(!pass1.intermediateFile)
     {
         cout<<"Unable to open file: intermediate_"<<fileName<<endl;
         exit(1);
     }
-    ListingFile.open("listing_"+fileName);
-    if(!ListingFile)
+    pass1.ListingFile.open("listing_"+fileName);
+    if(!pass1.ListingFile)
     {
         cout<<"Unable to open file: listing_"<<fileName<<endl;
     }
 
-    errorFile.open("error_"+fileName);
-    if(!errorFile){
+    pass1.errorFile.open("error_"+fileName);
+    if(!pass1.errorFile){
     cout<<"Unable to open file: error_"<<fileName<<endl;
     exit(1);
     }
-    writeToFile(errorFile,"************PASS2************");  
+    writeToFile(pass1.errorFile,"************PASS2************");  
 
     string address = "";
     string label = "";
@@ -288,15 +289,15 @@ void Pass2::pass2()
     int opAd = 0;
     bool literal = false;
 
-    getline(intermediateFile, tempBuffer);
+    getline(pass1.intermediateFile, tempBuffer);
     //LOGIC FROM BOOK
-    readIntFile(intermediateFile, isComment, address, label, opcode, operand, comment);
-    writeListingLine(ListingFile, isComment, address, label, opcode, operand, objCode, comment);
-    readIntFile(intermediateFile, isComment, address, label, opcode, operand, comment);
+    readIntFile(pass1.intermediateFile, isComment, address, label, opcode, operand, comment);
+    writeListingLine(pass1.ListingFile, isComment, address, label, opcode, operand, objCode, comment);
+    readIntFile(pass1.intermediateFile, isComment, address, label, opcode, operand, comment);
     if(opcode == "START")
     {
-        writeListingLine(ListingFile, isComment, address, label, opcode, operand, objCode, comment);
-        readIntFile(intermediateFile, isComment, address, label, opcode, operand, comment);
+        writeListingLine(pass1.ListingFile, isComment, address, label, opcode, operand, objCode, comment);
+        readIntFile(pass1.intermediateFile, isComment, address, label, opcode, operand, comment);
     }
     while(opcode!="END")
     {
@@ -329,7 +330,7 @@ void Pass2::pass2()
                             opAd = 0;
                             cout<<opcode<<endl;
                             //set error flag(undefined symbol)
-                            writeToFile(errorFile, "Undefined Symbol at address: " + address);
+                            writeToFile(pass1.errorFile, "Undefined Symbol at address: " + address);
                         }
                     }
                 } 
@@ -353,65 +354,15 @@ void Pass2::pass2()
                 }
             }
         }
-        writeListingLine(ListingFile, isComment, address, label, opcode, operand, objCode, comment);
-        readIntFile(intermediateFile, isComment, address, label, opcode, operand, comment);
+        writeListingLine(pass1.ListingFile, isComment, address, label, opcode, operand, objCode, comment);
+        readIntFile(pass1.intermediateFile, isComment, address, label, opcode, operand, comment);
         literal = false;
     }
     //LAST LINE
     address = "";
-    writeListingLine(ListingFile, isComment, address, label, opcode, operand, objCode, comment);
+    writeListingLine(pass1.ListingFile, isComment, address, label, opcode, operand, objCode, comment);
 
-    intermediateFile.close();
-    ListingFile.close();
-    errorFile.close();
+    pass1.intermediateFile.close();
+    pass1.ListingFile.close();
+    pass1.errorFile.close();
 };
-
-int main(int argc, char* argv[]){
-  
-  Pass1 pass1;
-  pass1.fileName = argv[1];
-  load_tables();
-  cout<<"\nPerforming PASS1"<<endl;
-  cout<<"Writing intermediate file to 'intermediate_"<<pass1.fileName<<"'"<<endl;
-  cout<<"Writing error file to 'error_"<<pass1.fileName<<"'"<<endl;
-  pass1.pass1();
-cout << "Writing SYMBOL TABLE" << endl;
-printtab.open("tables_" + pass1.fileName);
-writeToFile(printtab, "CSect   Symbol  Value   LENGTH  Flags:\n--------------------------------------\n");
-
-bool isFirstLine = true; // Flag to check if it's the first line
-
-for (auto const& it: SYMTAB) { 
-    string lengthStr = isFirstLine ? intToStringHex(pass1.program_length) : "      "; // Only set length for the first line
-    string flagsStr = it.second.relative ? "R" : " "; // Set flags to 'R' if relative is present
-
-    writestring += it.second.name + "\t" + it.second.address + "\t" + lengthStr + "\t" + flagsStr + "\n";
-
-    isFirstLine = false; // After the first iteration, set isFirstLine to false
-} 
-
-writeToFile(printtab, writestring);
-
-
-writeToFile(printtab, writestring);
-
-
-  writestring="" ;
-    cout<<"Writing LITERAL TABLE"<<endl;
-  
-  writeToFile(printtab,"**********************************LITERAL TABLE*****************************\n") ;
-    for (auto const& it: LITTAB) { 
-        writestring+=it.first+":-\t"+ "value:"+it.second.value+"\t|"+ "address:"+it.second.address+" \n" ;
-    } 
-    writeToFile(printtab,writestring) ;
-
-  
-  
-  Pass2 pass2;
-  pass2.fileName = argv[1];
-  load_tables();
-  cout<<"\nPerforming PASS2"<<endl;
-  cout << "Writing listing file to listing_"<<pass2.fileName<< endl;
-  pass2.pass2();
-  return 0;
-}

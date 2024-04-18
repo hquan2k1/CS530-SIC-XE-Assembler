@@ -90,6 +90,12 @@ int main(int argc, char* argv[]) {
     }
 
     pass1.printtab.close();
+
+    cout << "PASS1 complete" << endl;
+
+    cout << "Performing PASS2" << endl;
+
+    
   }
 
   return 0;
