@@ -8,7 +8,7 @@ If the environment allows script to be run, in Linux
 * `./run_this.sh`
 * Proceeds to type multiple arguments separated by spaces
 
-Else, type `make` and then `./assemble + [multiple arguments]` 
+Else, type `make` and then `./asxe + [multiple arguments]` 
 
 This assembler uses `struct`, and `typedef` to construct the different tables of the assembler, from the register table, to the symbol table 
 
