@@ -7,7 +7,7 @@
 #######################
 
 
-EXEC = assemble 
+EXEC = asxe 
 FILES = tables.cpp utility.cpp Pass1.cpp Pass2.cpp main.cpp 
 CC = g++ -std=c++11 
 LFLAGS = -g
