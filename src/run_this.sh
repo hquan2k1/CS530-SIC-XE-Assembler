@@ -30,3 +30,17 @@ read args
 # Run ./assemble with the user-provided arguments from the output directory
 ./assemble $args
 
+# Move the output files to their respective directories based on the file extension
+for file in *; do
+    case "$file" in
+        *.st)
+            mv "$file" SYMTAB/
+            ;;
+        *.e)
+            mv "$file" ERROR/
+            ;;
+        *)
+            # Handle any other file extensions or no extension files
+            ;;
+    esac
+done
