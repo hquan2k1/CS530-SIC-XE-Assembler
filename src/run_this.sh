@@ -17,18 +17,18 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Move the assemble file to the output directory
-mv assemble ../tests
+# Move the asxe file to the output directory
+mv asxe ../tests
 
 # Change the directory to the output directory
 cd ../tests
 
 # Ask the user for arguments
-echo "Please enter the arguments for ./assemble:"
+echo "Please enter the arguments for ./asxe:"
 read args
 
-# Run ./assemble with the user-provided arguments from the output directory
-./assemble $args
+# Run ./asxe with the user-provided arguments from the output directory
+./asxe $args
 
 # Move the output files to their respective directories based on the file extension
 for file in *; do
