@@ -6,7 +6,7 @@
  * utility.cpp
 */
 
-#include "Pass1.cpp"
+#include "Pass1.h"
 #include "Pass2.h"
 
 using namespace std;
