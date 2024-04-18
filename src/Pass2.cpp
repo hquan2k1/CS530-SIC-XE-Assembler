@@ -175,6 +175,17 @@ bool Pass2:: symbolInOperand(string operand)
             }
             i++;
         }
+        if(returnVal)
+        {
+            string tempBuffer = "";
+            int ind = 0;
+            while(ind<operand.length()&&operand[ind]!=',')
+            {
+                tempBuffer+=operand[ind];
+                ind++;
+            }
+            returnVal = REGTAB[tempBuffer].exists == 'n';
+        }
     }
     return returnVal;
 }
@@ -197,7 +208,7 @@ string Pass2:: fetchSymVal(string operand)
 
 }
 
-string Pass2:: assembleObj(string opcode, string operand, int opAd, string address)
+string Pass2:: assembleObj(string opcode, string operand, int opAd, string address, int format)
 {
     string returnVal = "";
     int opcd = 0x0;
@@ -212,6 +223,44 @@ string Pass2:: assembleObj(string opcode, string operand, int opAd, string addre
         ex = true;
     }
     opcd = stringHexToInt(OPTAB[getRealOpcode(opcode)].opcode);
+    if(format==1)
+    {
+        returnVal+=intToStringHex(opcd).substr(3,2);
+        return returnVal;
+    }
+    if(format==2)
+    {
+        returnVal+=intToStringHex(opcd).substr(3,2);
+        string tempBuffer = "";
+        int ind = 0;
+        while(ind<operand.length()&&operand[ind]!=',')
+        {
+            tempBuffer+=operand[ind];
+            ind++;
+        }
+        ind++;
+        if(REGTAB[tempBuffer].exists=='y')
+        {
+            returnVal+=REGTAB[tempBuffer].num;
+        }
+        tempBuffer="";
+        while(ind<operand.length()&&operand[ind]!=',')
+        {
+            tempBuffer+=operand[ind];
+            ind++;
+        }
+        if(tempBuffer!="")
+        {
+            if(REGTAB[tempBuffer].exists=='y')
+            {
+                returnVal+=REGTAB[tempBuffer].num;
+            }
+        }
+        else{
+            returnVal+='0';
+        }
+        return returnVal;
+    }
     if(operand[0]=='@')
     {
         opcd+=2;
@@ -229,6 +278,10 @@ string Pass2:: assembleObj(string opcode, string operand, int opAd, string addre
     {
         returnVal+='1';
         returnVal+=intToStringHex(opAd);
+    }
+    else if(operand[0]=='#'&&isdigit(operand[1]))
+    {
+        returnVal+=intToStringHex(opAd).substr(1,4);
     }
     else if(opAd==0)
     {
@@ -267,15 +320,16 @@ void Pass2::pass2()
         cout << "Unable to open file: " << fileName_noEXT << ".st" << endl;
         exit(1);
     }
-    pass1.ListingFile.open("listing_"+fileName);
+    pass1.ListingFile.open(fileName_noEXT + ".l");
     if(!pass1.ListingFile)
     {
-        cout<<"Unable to open file: listing_"<<fileName<<endl;
+        cout<<"Unable to open file: "<< fileName_noEXT <<".l"<<endl;
+        exit(1);
     }
 
-    pass1.errorFile.open("error_"+fileName);
+    pass1.errorFile.open(fileName_noEXT + ".e");
     if(!pass1.errorFile){
-    cout<<"Unable to open file: error_"<<fileName<<endl;
+    cout<<"Unable to open file: "<<fileName_noEXT + ".e"<<endl;
     exit(1);
     }
     writeToFile(pass1.errorFile,"************PASS2************");  
@@ -288,7 +342,7 @@ void Pass2::pass2()
     bool isComment = false;
     string objCode = "";
     int opAd = 0;
-    bool literal = false;
+    int format;
 
     getline(pass1.intermediateFile, tempBuffer);
     //LOGIC FROM BOOK
@@ -300,7 +354,7 @@ void Pass2::pass2()
         writeListingLine(pass1.ListingFile, isComment, address, label, opcode, operand, objCode, comment);
         readIntFile(pass1.intermediateFile, isComment, address, label, opcode, operand, comment);
     }
-    while(opcode!="END")
+    while(opcode!="END"&&operand!="END")
     {
         if (isComment == false)
         {
@@ -319,33 +373,27 @@ void Pass2::pass2()
                     }
                     else
                     {
-                        cout<<operand.substr(1,operand.length()-1)<<endl;
-                        if(opcode[0]=='=')
-                        {
-                            objCode = LITTAB[opcode.substr(1,opcode.length()-1)].value;
-                            literal = true;
-                        }
-                        else
-                        {
-                            //store 0 as operand address
-                            opAd = 0;
-                            cout<<opcode<<endl;
-                            //set error flag(undefined symbol)
-                            writeToFile(pass1.errorFile, "Undefined Symbol at address: " + address);
-                        }
+                        //store 0 as operand address
+                        opAd = 0;
+                        //set error flag(undefined symbol)
+                        writeToFile(pass1.errorFile, "Undefined Symbol at address: " + address);
                     }
                 } 
                 else
                 {
+                    if(operand[0]=='#')
+                    {
+                        opAd = stoi(operand.substr(1,operand.length()));
+                    }
                     //store 0 as operand address
-                    opAd = 0;
+                    else
+                    {
+                        opAd = 0;
+                    }                    
                 }
                 //assemble object code instruction
-                
-                if(!literal)
-                {
-                    objCode = assembleObj(opcode, operand, opAd, address);
-                }
+                format = OPTAB[getRealOpcode(opcode)].format;
+                objCode = assembleObj(opcode, operand, opAd, address, format);
             }
             else if((opcode=="BYTE"||opcode=="WORD")||opcode=="BASE")
             {
@@ -353,15 +401,44 @@ void Pass2::pass2()
                 {
                     baseRegisterVal = stringHexToInt(fetchSymVal(operand));
                 }
+                if(opcode=="BYTE"||opcode=="WORD")
+                {
+                    objCode="";
+                    if(operand.length()>0)
+                    {
+                        if(operand[0]=='X')
+                        {
+                            for(int i = 2; i<operand.length()-1;i++)
+                            {
+                                objCode+=(operand[i]);
+                            }
+                        }
+                        else
+                        {
+                            for(int i = 2; i<operand.length()-1;i++)
+                            {
+                                objCode+=intToStringHex((int)operand[i]).substr(3,2);
+                            }
+                        }
+                    }
+                }
+            }
+            else if(opcode[0]=='=')
+            {
+                objCode="";
+                for(int i = 3; i<opcode.length()-1;i++)
+                {
+                    objCode+=intToStringHex((int)opcode[i]).substr(3,2);
+                }
+                
             }
         }
         writeListingLine(pass1.ListingFile, isComment, address, label, opcode, operand, objCode, comment);
         readIntFile(pass1.intermediateFile, isComment, address, label, opcode, operand, comment);
-        literal = false;
     }
     //LAST LINE
     address = "";
-    writeListingLine(pass1.ListingFile, isComment, address, label, opcode, operand, objCode, comment);
+    writeListingLine(pass1.ListingFile, isComment, address, label, operand, comment, objCode, opcode);
 
     pass1.intermediateFile.close();
     pass1.ListingFile.close();

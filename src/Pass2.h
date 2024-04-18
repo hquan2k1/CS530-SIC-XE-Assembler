@@ -28,7 +28,7 @@ private:
     bool searchSymTab(string operand);
     bool symbolInOperand(string operand);
     string fetchSymVal(string operand);
-    string assembleObj(string opcode, string operand, int opAd, string address);
+    string assembleObj(string opcode, string operand, int opAd, string address, int format);
 
 };
 

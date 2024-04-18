@@ -200,7 +200,7 @@ void load_OPTAB(){
   OPTAB["RMO"].format=2;
   OPTAB["RMO"].exists='y';
 
-  OPTAB["RSUB"].opcode="4F";
+  OPTAB["RSUB"].opcode="4C";
   OPTAB["RSUB"].format=3;
   OPTAB["RSUB"].exists='y';
 
@@ -318,7 +318,3 @@ void load_tables(){
   load_OPTAB();
   load_REGTAB();
 }
-
-
-
-
