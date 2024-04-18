@@ -1,7 +1,5 @@
 #include "Pass1.h"
 
-using namespace std;
-
 /**
  * @brief Comparator function for sorting symbols in the symbol table.
  * 
@@ -21,6 +19,10 @@ bool symtabComparator(const std::pair<std::string, struct_label>& a, const std::
 }
 
 int main(int argc, char* argv[]) {
+  if (argc == 0) {
+    cout << "Doh, you forgot the input files" << endl;
+    return 1;
+  }
   
   for (int i = 1; i < argc; i++) {
     Pass1 pass1;
