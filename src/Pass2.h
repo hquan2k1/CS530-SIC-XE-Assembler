@@ -1,4 +1,10 @@
-//Pass2.h
+/*
+ * QUAN NGUYEN 
+ * cssc4550
+ * CS530, Spring 2024
+ * Assignment #2
+ * utility.cpp
+*/
 
 #ifndef SICXEASSEMBLER_PASS2_H
 #define SICXEASSEMBLER_PASS2_H

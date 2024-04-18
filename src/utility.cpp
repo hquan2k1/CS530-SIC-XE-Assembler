@@ -1,4 +1,14 @@
+/*
+ * QUAN NGUYEN 
+ * cssc4550
+ * CS530, Spring 2024
+ * Assignment #2
+ * utility.cpp
+*/
+
 #include "utility.h"
+
+
 /**
  * Converts an integer to a hexadecimal string representation.
  * 
@@ -15,6 +25,15 @@ string intToStringHex(int x,int fill){
   return temp;
 }
 
+/**
+ * @brief Expands a string to a specified length by adding a fill character.
+ * 
+ * @param data The input string to be expanded.
+ * @param length The desired length of the expanded string.
+ * @param fillChar The character used to fill the expanded string.
+ * @param back Flag indicating whether the fill characters should be added at the back of the string (default is false).
+ * @return The expanded string.
+ */
 string expandString(string data,int length,char fillChar,bool back=false){
   if(back){
     if(length<=data.length()){
@@ -244,11 +263,24 @@ char getFlagFormat(string data){
   return ' ';
 }
 
+/**
+ * @brief Constructs a new EvaluateString object.
+ * 
+ * This constructor initializes the `EvaluateString` object with the provided `data`.
+ * It sets the `storedData` member variable to the given `data` and initializes the `index` to 0.
+ * 
+ * @param data The string data to be stored in the `EvaluateString` object.
+ */
 EvaluateString::EvaluateString(string data){
   storedData = data;
   index=0;
 }
 
+/**
+ * Returns the result of evaluating the string expression.
+ * 
+ * @return The result of the evaluated expression.
+ */
 int EvaluateString::getResult(){
   int result = term();
   while(peek()=='+' || peek() == '-'){
@@ -261,6 +293,12 @@ int EvaluateString::getResult(){
   return result;
 }
 
+/**
+ * Evaluates and returns the result of a term in the expression.
+ * A term consists of one or more factors multiplied or divided together.
+ * 
+ * @return The result of the evaluated term.
+ */
 int EvaluateString::term(){
   int result = factor();
   while(peek() == '*' || peek() == '/'){
@@ -274,6 +312,12 @@ int EvaluateString::term(){
   return result;
 }
 
+/**
+ * Evaluates a factor in the expression.
+ * A factor can be a number, an expression enclosed in parentheses, or a negative factor.
+ * 
+ * @return The evaluated value of the factor.
+ */
 int EvaluateString::factor(){
   if(peek() >= '0' && peek() <= '9'){
     return number();
@@ -291,6 +335,13 @@ int EvaluateString::factor(){
   return 0;
 }
 
+/**
+ * Returns the numeric value of the current character in the input stream.
+ * This function reads characters from the input stream until a non-digit character is encountered.
+ * It converts the read characters into an integer value and returns it.
+ *
+ * @return The numeric value of the current character in the input stream.
+ */
 int EvaluateString::number(){
   int result = get() - '0';
   while(peek() >= '0' && peek() <= '9'){
@@ -299,10 +350,21 @@ int EvaluateString::number(){
   return result;
 }
 
+/**
+ * Retrieves the next character from the stored data and increments the index.
+ * 
+ * @return The next character from the stored data.
+ */
 char EvaluateString::get(){
   return storedData[index++];
 }
 
+/**
+ * Returns the character at the current index in the storedData array.
+ * This function does not modify the storedData array or the index.
+ *
+ * @return The character at the current index.
+ */
 char EvaluateString::peek(){
   return storedData[index];
 }

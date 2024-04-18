@@ -1,8 +1,14 @@
+/*
+ * QUAN NGUYEN 
+ * cssc4550
+ * CS530, Spring 2024
+ * Assignment #2
+ * utility.cpp
+*/
+
 #include "Pass1.h"
 
 using namespace std;
-
-
 
 /**
  * Handles the LTORG directive in Pass 1 of the assembly process.
@@ -38,7 +44,7 @@ void Pass1::handle_LTORG(string& litPrefix,int& LOCCTR, int& prevLOCCTR){
 }
 
 /**
- * Evaluates an expression and determines the value of the operand.
+ * Evaluates an whole expression and determines the value of the operand.
  * 
  * @param expression The expression to be evaluated.
  * @param relative A boolean reference indicating if the operand is relative or not.

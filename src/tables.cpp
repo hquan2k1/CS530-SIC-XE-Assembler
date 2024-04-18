@@ -1,3 +1,11 @@
+/*
+ * QUAN NGUYEN 
+ * cssc4550
+ * CS530, Spring 2024
+ * Assignment #2
+ * utility.cpp
+*/
+
 #include "tables.h"
 
 SYMBOL_TABLE_TYPE SYMTAB;

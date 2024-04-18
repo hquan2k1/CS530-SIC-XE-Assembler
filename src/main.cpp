@@ -1,3 +1,11 @@
+/*
+ * QUAN NGUYEN 
+ * cssc4550
+ * CS530, Spring 2024
+ * Assignment #2
+ * utility.cpp
+*/
+
 #include "Pass1.h"
 
 /**
@@ -17,6 +25,19 @@ bool symtabComparator(const std::pair<std::string, struct_label>& a, const std::
   if (b.second.isstart == 'y') return false;
   return stringHexToInt(a.second.address) < stringHexToInt(b.second.address);
 }
+
+/**
+ * @brief The main function of the program.
+ *
+ * This function is the entry point of the program. It takes command-line arguments
+ * and performs various operations based on the provided arguments. It processes
+ * multiple input files and generates intermediate files and error files for each
+ * input file. It also writes the symbol table and literal table to .st file.
+ *
+ * @param argc The number of command-line arguments.
+ * @param argv An array of strings containing the command-line arguments.
+ * @return An integer representing the exit status of the program.
+ */
 
 int main(int argc, char* argv[]) {
   if (argc == 0) {
@@ -42,8 +63,11 @@ int main(int argc, char* argv[]) {
     cout << "Writing SYMBOL TABLE" << endl;
     pass1.printtab.open(fileName_noEXT + ".st");
     writeToFile(pass1.printtab, "CSECT Symbol  Value   Length  Flags:\n--------------------------------------");
+    
+    // Convert SYMTAB to vector and sort
     vector<pair<string, struct_label>> symtabVec(SYMTAB.begin(), SYMTAB.end());
     sort(symtabVec.begin(), symtabVec.end(), symtabComparator);
+    
     for (const auto& it : symtabVec) {
       string fourthColumn = it.second.isstart == 'y' ? intToStringHex(pass1.program_length) : "";
       string writestring = (it.second.isstart == 'y' ? it.first : "") + "\t" +

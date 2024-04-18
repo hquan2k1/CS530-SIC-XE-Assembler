@@ -1,4 +1,11 @@
-// Pass1.h
+/*
+ * QUAN NGUYEN 
+ * cssc4550
+ * CS530, Spring 2024
+ * Assignment #2
+ * utility.cpp
+*/
+
 #ifndef PASS1_H
 #define PASS1_H
 

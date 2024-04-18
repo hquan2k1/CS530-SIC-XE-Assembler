@@ -1,4 +1,11 @@
-//Pass2.cpp
+/*
+ * QUAN NGUYEN 
+ * cssc4550
+ * CS530, Spring 2024
+ * Assignment #2
+ * utility.cpp
+*/
+
 #include "Pass1.cpp"
 #include "Pass2.h"
 

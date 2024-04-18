@@ -1,3 +1,11 @@
+/*
+ * QUAN NGUYEN 
+ * cssc4550
+ * CS530, Spring 2024
+ * Assignment #2
+ * utility.cpp
+*/
+
 #ifndef UTILITY_H
 #define UTILITY_H
 
