@@ -216,7 +216,7 @@ void Pass1::pass1() {
   // Open intermediate file and validate input
   intermediateFile.open(fileName_noEXT + ".i");
   if (!intermediateFile) {
-    cout << "Unable to open file: intermediate_" << fileName << endl;
+    cout << "Unable to open file: " << fileName_noEXT << ".st" << endl;
     exit(1);
   }
 

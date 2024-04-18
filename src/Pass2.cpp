@@ -258,12 +258,13 @@ string Pass2:: assembleObj(string opcode, string operand, int opAd, string addre
 
 void Pass2::pass2()
 {
+    string fileName_noEXT = fileName.substr(0, fileName.length() - 4);
     //OPEN FILES
     string tempBuffer;
-    pass1.intermediateFile.open("intermediate_"+ fileName);//begin
+    pass1.intermediateFile.open(fileName_noEXT + ".i");//begin
     if(!pass1.intermediateFile)
     {
-        cout<<"Unable to open file: intermediate_"<<fileName<<endl;
+        cout << "Unable to open file: " << fileName_noEXT << ".st" << endl;
         exit(1);
     }
     pass1.ListingFile.open("listing_"+fileName);
