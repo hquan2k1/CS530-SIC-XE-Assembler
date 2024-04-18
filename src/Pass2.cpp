@@ -1,6 +1,6 @@
 /*
- * QUAN NGUYEN 
- * cssc4550
+ * QUAN NGUYEN , IAN GOWER
+ * cssc4550 , cssc4053
  * CS530, Spring 2024
  * Assignment #2
  * utility.cpp
@@ -15,6 +15,17 @@ Pass1 pass1;
 
 int baseRegisterVal;
 
+/**
+ * @brief Reads a section of data from a given string.
+ * 
+ * This function reads a section of data from the given string starting from the specified index.
+ * It continues reading until it encounters a tab character or reaches the end of the string.
+ * The section of data is stored in a temporary buffer and returned as a string.
+ * 
+ * @param data The string from which to read the section of data.
+ * @param ind The index from which to start reading the section of data.
+ * @return The section of data read from the string.
+ */
 string Pass2:: readSection(string data, int& ind)
 {
     string tempBuffer = "";
@@ -33,6 +44,18 @@ string Pass2:: readSection(string data, int& ind)
     return tempBuffer;
 }
 
+/**
+ * Reads a line from the input file and extracts the different fields.
+ *
+ * @param readFile The input file stream to read from.
+ * @param isComment A boolean reference to store whether the line is a comment or not.
+ * @param address A string reference to store the address field.
+ * @param label A string reference to store the label field.
+ * @param opcode A string reference to store the opcode field.
+ * @param operand A string reference to store the operand field.
+ * @param comment A string reference to store the comment field.
+ * @return True if a line was successfully read, false otherwise.
+ */
 bool Pass2:: readIntFile(ifstream& readFile, bool& isComment, string& address, string& label, string& opcode, string& operand, string& comment)
 {
     string line = "";
@@ -64,6 +87,18 @@ bool Pass2:: readIntFile(ifstream& readFile, bool& isComment, string& address, s
     return true;
 }
 
+/**
+ * Writes a line to the listing file.
+ *
+ * @param writeFile The output file stream to write to.
+ * @param isComment A flag indicating if the line is a comment.
+ * @param address The address of the line.
+ * @param label The label of the line.
+ * @param opcode The opcode of the line.
+ * @param operand The operand of the line.
+ * @param objCode The object code of the line.
+ * @param comment The comment of the line.
+ */
 void Pass2:: writeListingLine(ofstream& writeFile, bool isComment, string& address, string& label, string& opcode, string& operand, string &objCode, string&comment)
 {
     string writeData = "";
@@ -127,6 +162,12 @@ void Pass2:: writeListingLine(ofstream& writeFile, bool isComment, string& addre
     comment = "";
 }
 
+/**
+ * Searches for an opcode in the optab (opcode table).
+ *
+ * @param opcode The opcode to search for.
+ * @return True if the opcode is found in the optab, false otherwise.
+ */
 bool Pass2:: searchOptab(string opcode)
 {
     if(OPTAB[getRealOpcode(opcode)].exists=='y')
@@ -136,6 +177,12 @@ bool Pass2:: searchOptab(string opcode)
     return false;
 }
 
+/**
+ * Searches the symbol table for a given operand.
+ *
+ * @param operand The operand to search for in the symbol table.
+ * @return True if the operand is found in the symbol table, false otherwise.
+ */
 bool Pass2:: searchSymTab(string operand)
 {
     string tempBuffer = "";
@@ -156,6 +203,12 @@ bool Pass2:: searchSymTab(string operand)
     return false;
 }
 
+/**
+ * Checks if a symbol is present in the operand.
+ *
+ * @param operand The operand to check.
+ * @return True if the symbol is present in the operand, false otherwise.
+ */
 bool Pass2:: symbolInOperand(string operand)
 {
     bool returnVal = false;
@@ -190,6 +243,12 @@ bool Pass2:: symbolInOperand(string operand)
     return returnVal;
 }
 
+/**
+ * Retrieves the value associated with a given symbol.
+ *
+ * @param operand The symbol for which to fetch the value.
+ * @return The value associated with the symbol, or an empty string if the symbol is not found.
+ */
 string Pass2:: fetchSymVal(string operand)
 {
     string tempBuffer="";
@@ -208,6 +267,16 @@ string Pass2:: fetchSymVal(string operand)
 
 }
 
+/**
+ * Assembles the object code for a given opcode, operand, and other parameters.
+ *
+ * @param opcode The opcode of the instruction.
+ * @param operand The operand of the instruction.
+ * @param opAd The operand address.
+ * @param address The address of the instruction.
+ * @param format The format of the instruction.
+ * @return The assembled object code.
+ */
 string Pass2:: assembleObj(string opcode, string operand, int opAd, string address, int format)
 {
     string returnVal = "";
@@ -309,6 +378,10 @@ string Pass2:: assembleObj(string opcode, string operand, int opAd, string addre
 
 
 
+/**
+ * Performs the second pass of the assembler.
+ * This pass generates the object code and writes it to the output file.
+ */
 void Pass2::pass2()
 {
     string fileName_noEXT = fileName.substr(0, fileName.length() - 4);
