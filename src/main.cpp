@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
     pass2.fileName = argv[i];
 
     cout<<"\nPerforming PASS2"<<endl;
-    cout << "Writing listing file to listing_"<<pass2.fileName<< endl;
+    cout << "Writing listing file to "<<fileName_noEXT<<".l"<< endl;
     pass2.pass2();
 
     clear_tables();
