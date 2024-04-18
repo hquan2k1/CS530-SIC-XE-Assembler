@@ -1,9 +1,9 @@
 /*
- * QUAN NGUYEN 
- * cssc4550
+ * QUAN NGUYEN, IAN GOWER
+ * cssc4550, cssc4053
  * CS530, Spring 2024
  * Assignment #2
- * utility.cpp
+ * tables.h
 */
 
 #ifndef TABLES_H
