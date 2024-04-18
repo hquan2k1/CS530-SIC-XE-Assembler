@@ -99,12 +99,12 @@ int main(int argc, char* argv[]) {
     Pass2 pass2;
     pass2.fileName = argv[i];
 
-    clear_tables();
-    load_tables();
-
     cout<<"\nPerforming PASS2"<<endl;
     cout << "Writing listing file to listing_"<<pass2.fileName<< endl;
     pass2.pass2();
+
+    clear_tables();
+    load_tables();
   }
 
   return 0;
